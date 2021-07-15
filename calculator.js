@@ -5,6 +5,8 @@ let NUM_ONE = 0;
 let NUM_TWO = 0;
 let NUM_INDEX = 1;
 let OPERATOR = "";
+let DECIMAL_USED = false;
+let STORED_NUMBER = 0;
 
 let calcDisplayText = document.querySelector('#calcDisplayText');
 
@@ -13,6 +15,7 @@ btnOperationsPress();
 btnClearPress();
 btnEqualPress();
 
+// Calculates then clears variabls for next equation
 function btnEqualPress() {
     let btnEqual = document.querySelector('#btnEquals');
 
@@ -28,7 +31,6 @@ function btnEqualPress() {
         OPERATOR = "";
     })
 }
-
 
 // RESET EVERYTHING
 function btnClearPress() {
@@ -54,10 +56,17 @@ function btnOperationsPress() {
         btn.addEventListener('click', () => {
             if (NUM_INDEX == 1) {
                 NUM_INDEX = 2;
+            } else if (NUM_INDEX == 2) {
+                OPERATOR = btn.value;
+                STORED_NUMBER = operate(OPERATOR, NUM_ONE, NUM_TWO);
+                newCalcDisplayText = STORED_NUMBER.toString();
+                calcDisplayText.textContent = newCalcDisplayText;
+            } else {
+                OPERATOR = btn.value;
+                calcDisplayText.textContent = "0";
+                // alert(OPERATOR);
             }
-            OPERATOR = btn.value;
-            calcDisplayText.textContent = "0";
-            // alert(OPERATOR);
+
         })
     })
 }
@@ -84,6 +93,11 @@ function btnNumPress() {
                     NUM_ONE = Number(newCalcDisplayText);
                 }
             } else if(NUM_INDEX == 2) {
+                // Check if additional operators have been called
+                if (STORED_NUMBER > 0 || STORED_NUMBER < 0) {
+                    // Replace NUM_ONE if this is after 2nd operator
+                    NUM_ONE = STORED_NUMBER;
+                }
                 if (NUM_ARRAY_TWO.length >= 14) {
                     alert("Came in here with that Big Rick Energy!")
                 } else {
