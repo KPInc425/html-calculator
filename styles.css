@@ -1,0 +1,50 @@
+html {
+    background-color: black;
+    color: white;
+}
+
+#calcContainer {
+    border: 2px solid white;
+    width: 400px;
+    height: 600px;
+    margin: auto;
+}
+
+#calcDisplay {
+    /* background-color: grey; */
+    color: cyan;
+    border: 2px solid cyan;
+    max-width: 400px;
+    text-align: right;
+    padding-right: 10px;
+    margin: 10px;
+    margin-bottom: 20px;
+}
+
+.btnContainers {
+    border: 1px solid white;
+    margin: auto;
+    padding: 10px;
+}
+
+#btnOperationsContainer {
+    width: 250px;
+}
+
+#btnNumContainer {
+    width: 250px;
+    margin-top: 10px;
+}
+
+
+
+body {
+    text-align: center;
+}
+
+button {
+    width: 64px;
+    height: 64px;
+    background-color: black;
+    color: white;
+}
