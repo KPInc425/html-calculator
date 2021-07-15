@@ -5,32 +5,40 @@ html {
 
 #calcContainer {
     border: 2px solid white;
-    width: 320px;
-    height: 600px;
+    max-width: 420px;
+    min-width: 300px;
+    height: auto;
     margin: auto;
     margin-top: 15px;
-    box-shadow:  grey;
     border-radius: 12px;
 }
 
+.containerShadow {
+    box-shadow: 0;
+    transition: 200ms ease-in-out;
+}
 
+.containerShadow:hover {
+    box-shadow: 0 15px 20px rgba(0, 255, 255, 0.5);
+}
 
 #calcDisplay {
-    /* background-color: grey; */
     color: cyan;
     border: 2px solid cyan;
     max-width: 400px;
     text-align: right;
     padding: 20px 10px 20px 0;
-    margin: 10px;
+    margin: 20px;
     font-size: 32px;
 }
 
 .btnContainers {
+    background-color: rgba(0, 217, 255, 0.5);
     border: 1px solid white;
     margin: auto;
     padding: 10px;
     border-radius: 12px;
+    box-shadow: 0 3px 3px 3px grey;
 }
 
 #btnOperationsContainer {
@@ -56,25 +64,31 @@ button {
     margin: 0px -3px 0px -3px;
     font-size: 24px;
     border-radius: 12px;
-
 }
 
 button:hover {
     background-color: cyan;
     color: magenta;
     font-weight: bolder;
+    transform: scale(1.25, 1.25);
 }
 
-#btnEquals:hover {
+#btnEquals:hover, #btnClear:hover {
     background-color: magenta;
     color: cyan;
+}
+
+#btnBackSpace:hover {
+    background-color: red;
+    color: white;
 }
 
 #btnClear {
     height: 32px;
     width: 128px;
-    margin-top: 10px;
+    margin: 10px;
     font-size: 18px;
+    /* padding-bottom: 10px; */
     
 }
 
