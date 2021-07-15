@@ -4,13 +4,63 @@ let NUM_ARRAY_TWO = [];
 let NUM_ONE = 0;
 let NUM_TWO = 0;
 let NUM_INDEX = 1;
+let OPERATOR = "";
 
 let calcDisplayText = document.querySelector('#calcDisplayText');
 
 btnNumPress();
+btnOperationsPress();
+btnClearPress();
+btnEqualPress();
+
+function btnEqualPress() {
+    let btnEqual = document.querySelector('#btnEquals');
+
+    btnEqual.addEventListener('click', () => {
+        let newCalcDisplayText = operate(OPERATOR, NUM_ONE, NUM_TWO);
+        calcDisplayText.textContent = newCalcDisplayText;
+        CALCULATED_NUMBER = 0;
+        NUM_ARRAY_ONE = [];
+        NUM_ARRAY_TWO = [];
+        NUM_ONE = 0;
+        NUM_TWO = 0;
+        NUM_INDEX = 1;
+        OPERATOR = "";
+    })
+}
 
 
+// RESET EVERYTHING
+function btnClearPress() {
+    let btnClear = document.querySelector('#btnClear');
 
+    btnClear.addEventListener('click', () => {
+        CALCULATED_NUMBER = 0;
+        NUM_ARRAY_ONE = [];
+        NUM_ARRAY_TWO = [];
+        NUM_ONE = 0;
+        NUM_TWO = 0;
+        NUM_INDEX = 1;
+        OPERATOR = "";
+        calcDisplayText.textContent = "0";
+    });
+}
+
+// Event listener added to Operator buttons
+function btnOperationsPress() {
+    let btnArray = document.querySelectorAll('.btnOperation');
+
+    btnArray.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (NUM_INDEX == 1) {
+                NUM_INDEX = 2;
+            }
+            OPERATOR = btn.value;
+            calcDisplayText.textContent = "0";
+            // alert(OPERATOR);
+        })
+    })
+}
 
 //Event listeners added to number buttons
 function btnNumPress() {
@@ -22,7 +72,7 @@ function btnNumPress() {
             // A check to make sure number doesn't get too large for display
             if (NUM_INDEX == 1) {
                 if (NUM_ARRAY_ONE.length >= 14) {
-                    alert("The Number you are attempting is too large.")
+                    alert("Came in here with that Big Rick Energy!")
                 } else {
                     NUM_ARRAY_ONE.push(btn.value);
 
@@ -33,9 +83,9 @@ function btnNumPress() {
                     // We store the string as a number for future computation
                     NUM_ONE = Number(newCalcDisplayText);
                 }
-            } else {
-                if (NUM_ARRAY_ONE.length >= 14) {
-                    alert("The Number you are attempting is too large.")
+            } else if(NUM_INDEX == 2) {
+                if (NUM_ARRAY_TWO.length >= 14) {
+                    alert("Came in here with that Big Rick Energy!")
                 } else {
                     NUM_ARRAY_TWO.push(btn.value);
 
@@ -67,6 +117,7 @@ function operate(operator, numOne, numTwo) {
             break;
     }
     console.log(CALCULATED_NUMBER);
+    return CALCULATED_NUMBER;
 }
 
 function add(...args) {
