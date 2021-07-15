@@ -68,6 +68,10 @@ function btnOperationsPress() {
                 STORED_NUMBER = operate(OPERATOR, NUM_ONE, NUM_TWO);
                 newCalcDisplayText = STORED_NUMBER.toString();
                 calcDisplayText.textContent = newCalcDisplayText;
+                // Need to reset numArrays to prevent old data corruption
+                // THESE NEED TO BE MOVED OR GATED THEY ARE RESETTING EACH CLICK
+                NUM_ARRAY_ONE = [];
+                NUM_ARRAY_TWO = [];
             }
             OPERATOR = btn.value;
             calcDisplayText.textContent = "0";
@@ -104,9 +108,6 @@ function btnNumPress() {
                 if (STORED_NUMBER > 0 || STORED_NUMBER < 0) {
                     // Replace NUM_ONE if this is after 2nd operator
                     NUM_ONE = STORED_NUMBER;
-                    // Need to reset numArrays to prevent old data corruption
-                    NUM_ARRAY_ONE = [];
-                    NUM_ARRAY_TWO = [];
                 }
                 if (NUM_ARRAY_TWO.length >= 14) {
                     alert("Came in here with that Big Rick Energy!")
