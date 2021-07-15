@@ -8,7 +8,7 @@ let OPERATOR = "";
 let DECIMAL_USED = false;
 let STORED_NUMBER = 0;
 
-let calcDisplayText = document.querySelector('#calcDisplayText');
+const calcDisplayText = document.querySelector('#calcDisplayText');
 
 btnNumPress();
 btnOperationsPress();
@@ -17,8 +17,14 @@ btnEqualPress();
 btnDecimalPress();
 btnBackSpacePress();
 
+window.addEventListener('keydown', (e) => {
+    console.log(e);
+    const key = document.querySelector(`.key[data-key ="${KeyboardEvent.code}"]`);
+    console.log(key);
+})
+
 function btnBackSpacePress() {
-    let btnBackSpace = document.querySelector('#btnBackSpace');
+    const btnBackSpace = document.querySelector('#btnBackSpace');
 
     btnBackSpace.addEventListener('click', () => {
         if (NUM_INDEX == 1) {
@@ -42,7 +48,7 @@ function btnBackSpacePress() {
 }
 
 function btnDecimalPress() {
-    let btnDecimal = document.querySelector('#btnDecimal');
+    const btnDecimal = document.querySelector('#btnDecimal');
 
     btnDecimal.addEventListener('click', () => {
         if (DECIMAL_USED) {
@@ -67,7 +73,7 @@ function btnDecimalPress() {
 
 // Calculates then clears variabls for next equation
 function btnEqualPress() {
-    let btnEqual = document.querySelector('#btnEquals');
+    const btnEqual = document.querySelector('#btnEquals');
 
     btnEqual.addEventListener('click', () => {
         let newCalcDisplayText = operate(OPERATOR, NUM_ONE, NUM_TWO);
@@ -92,7 +98,7 @@ function btnEqualPress() {
 
 // RESET EVERYTHING
 function btnClearPress() {
-    let btnClear = document.querySelector('#btnClear');
+    const btnClear = document.querySelector('#btnClear');
 
     btnClear.addEventListener('click', () => {
         CALCULATED_NUMBER = 0;
@@ -110,7 +116,7 @@ function btnClearPress() {
 
 // Event listener added to Operator buttons
 function btnOperationsPress() {
-    let btnArray = document.querySelectorAll('.btnOperation');
+    const btnArray = document.querySelectorAll('.btnOperation');
 
     btnArray.forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -137,7 +143,7 @@ function btnOperationsPress() {
 
 //Event listeners added to number buttons
 function btnNumPress() {
-    let btnArray = document.querySelectorAll('.btnNum');
+    const btnArray = document.querySelectorAll('.btnNum');
 
     btnArray.forEach((btn) => {
         btn.addEventListener('click', () => {
