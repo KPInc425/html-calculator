@@ -48,3 +48,9 @@ button {
     background-color: black;
     color: white;
 }
+
+#btnClear {
+    height: 32px;
+    width: 128px;
+    margin-top: 7px;
+}
