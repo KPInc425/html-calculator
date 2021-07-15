@@ -22,6 +22,7 @@ function btnEqualPress() {
     btnEqual.addEventListener('click', () => {
         let newCalcDisplayText = operate(OPERATOR, NUM_ONE, NUM_TWO);
         if (newCalcDisplayText % 1 != 0) {
+            // Used a parseFloat here to get rid of trailing zeros
             calcDisplayText.textContent = parseFloat(newCalcDisplayText.toFixed(12));
         } else {
             calcDisplayText.textContent = newCalcDisplayText;
