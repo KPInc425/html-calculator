@@ -73,7 +73,16 @@ button:hover {
     transform: scale(1.25, 1.25);
 }
 
-#btnEquals:hover, #btnClear:hover {
+.btnOperation {
+    background-color: rgba(0, 217, 255, 0.75);
+    color: black;
+}
+
+#btnEquals {
+    background-color: maroon;
+}
+
+#btnEquals:hover, #btnClear:hover, .btnOperation:hover {
     background-color: magenta;
     color: cyan;
 }

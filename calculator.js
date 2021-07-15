@@ -14,6 +14,56 @@ btnNumPress();
 btnOperationsPress();
 btnClearPress();
 btnEqualPress();
+btnDecimalPress();
+btnBackSpacePress();
+
+function btnBackSpacePress() {
+    let btnBackSpace = document.querySelector('#btnBackSpace');
+
+    btnBackSpace.addEventListener('click', () => {
+        if (NUM_INDEX == 1) {
+            NUM_ARRAY_ONE.pop();
+            if (NUM_ARRAY_ONE.length == 0) {
+                NUM_ARRAY_ONE[0] = 0;
+            }
+            // We make array a string, remove all , to make string display like a number
+            let newCalcDisplayText = NUM_ARRAY_ONE.toString().replace(/,/g, "");
+            calcDisplayText.textContent = newCalcDisplayText;
+        } else {
+            NUM_ARRAY_TWO.pop();
+            if (NUM_ARRAY_TWO.length == 0) {
+                NUM_ARRAY_TWO[0] = 0;
+            }
+            // We make array a string, remove all , to make string display like a number
+            let newCalcDisplayText = NUM_ARRAY_TWO.toString().replace(/,/g, "");
+            calcDisplayText.textContent = newCalcDisplayText;
+        }
+    })
+}
+
+function btnDecimalPress() {
+    let btnDecimal = document.querySelector('#btnDecimal');
+
+    btnDecimal.addEventListener('click', () => {
+        if (DECIMAL_USED) {
+            alert('You already have a decimal, this isn\'t an IP');
+        } else {
+            if (NUM_INDEX == 1) {
+                NUM_ARRAY_ONE.push(btnDecimal.value)
+                // We make array a string, remove all , to make string display like a number
+                let newCalcDisplayText = NUM_ARRAY_ONE.toString().replace(/,/g, "");
+                calcDisplayText.textContent = newCalcDisplayText;
+                DECIMAL_USED = true;
+            } else {
+                NUM_ARRAY_TWO.push(btnDecimal.value)
+                // We make array a string, remove all , to make string display like a number
+                let newCalcDisplayText = NUM_ARRAY_TWO.toString().replace(/,/g, "");
+                calcDisplayText.textContent = newCalcDisplayText;
+                DECIMAL_USED = true;
+            }
+        }
+    })
+}
 
 // Calculates then clears variabls for next equation
 function btnEqualPress() {
@@ -36,6 +86,7 @@ function btnEqualPress() {
         NUM_INDEX = 1;
         OPERATOR = "";
         STORED_NUMBER = 0;
+        DECIMAL_USED = false;
     })
 }
 
@@ -52,6 +103,7 @@ function btnClearPress() {
         NUM_INDEX = 1;
         OPERATOR = "";
         STORED_NUMBER = 0;
+        DECIMAL_USED = false;
         calcDisplayText.textContent = "0";
     });
 }
@@ -75,6 +127,7 @@ function btnOperationsPress() {
             }
             OPERATOR = btn.value;
             calcDisplayText.textContent = "0";
+            DECIMAL_USED = false;
             // alert(OPERATOR);
             
 
@@ -94,6 +147,11 @@ function btnNumPress() {
                 if (NUM_ARRAY_ONE.length >= 14) {
                     alert("Came in here with that Big Rick Energy!")
                 } else {
+                    // This is needed to prevent a leading 0 that is aquired during the 
+                    // BackSpace button
+                    if (NUM_ARRAY_ONE[0] == 0) {
+                        NUM_ARRAY_ONE.pop()
+                    }
                     NUM_ARRAY_ONE.push(btn.value);
 
                     // We make array a string, remove all , to make string display like a number
@@ -112,6 +170,11 @@ function btnNumPress() {
                 if (NUM_ARRAY_TWO.length >= 14) {
                     alert("Came in here with that Big Rick Energy!")
                 } else {
+                    // This is needed to prevent a leading 0 that is aquired during the 
+                    // BackSpace button
+                    if (NUM_ARRAY_TWO[0] == 0) {
+                        NUM_ARRAY_TWO.pop()
+                    }
                     NUM_ARRAY_TWO.push(btn.value);
 
                     let newCalcDisplayText = NUM_ARRAY_TWO.toString().replace(/,/g, ""); 
@@ -138,6 +201,7 @@ function operate(operator, numOne, numTwo) {
             CALCULATED_NUMBER = multiply(numOne, numTwo);
             break;
         case ('/'):
+            if (numTwo == 0) { alert("You Cheeky Bastard! That's Infinity!"); break;}
             CALCULATED_NUMBER = divide(numOne, numTwo);
             break;
     }
