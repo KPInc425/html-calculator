@@ -5,10 +5,15 @@ html {
 
 #calcContainer {
     border: 2px solid white;
-    width: 400px;
+    width: 320px;
     height: 600px;
     margin: auto;
+    margin-top: 15px;
+    box-shadow:  grey;
+    border-radius: 12px;
 }
+
+
 
 #calcDisplay {
     /* background-color: grey; */
@@ -16,23 +21,24 @@ html {
     border: 2px solid cyan;
     max-width: 400px;
     text-align: right;
-    padding-right: 10px;
+    padding: 20px 10px 20px 0;
     margin: 10px;
-    margin-bottom: 20px;
+    font-size: 32px;
 }
 
 .btnContainers {
     border: 1px solid white;
     margin: auto;
     padding: 10px;
+    border-radius: 12px;
 }
 
 #btnOperationsContainer {
-    width: 250px;
+    width: 225px;
 }
 
 #btnNumContainer {
-    width: 250px;
+    width: 225px;
     margin-top: 10px;
 }
 
@@ -47,10 +53,31 @@ button {
     height: 64px;
     background-color: black;
     color: white;
+    margin: 0px -3px 0px -3px;
+    font-size: 24px;
+    border-radius: 12px;
+
+}
+
+button:hover {
+    background-color: cyan;
+    color: magenta;
+    font-weight: bolder;
+}
+
+#btnEquals:hover {
+    background-color: magenta;
+    color: cyan;
 }
 
 #btnClear {
     height: 32px;
     width: 128px;
-    margin-top: 7px;
+    margin-top: 10px;
+    font-size: 18px;
+    
+}
+
+#historyContainer {
+    margin-top: 10px;
 }
