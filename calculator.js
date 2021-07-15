@@ -21,7 +21,12 @@ function btnEqualPress() {
 
     btnEqual.addEventListener('click', () => {
         let newCalcDisplayText = operate(OPERATOR, NUM_ONE, NUM_TWO);
-        calcDisplayText.textContent = newCalcDisplayText;
+        if (newCalcDisplayText % 1 != 0) {
+            calcDisplayText.textContent = parseFloat(newCalcDisplayText.toFixed(12));
+        } else {
+            calcDisplayText.textContent = newCalcDisplayText;
+        }
+        
         CALCULATED_NUMBER = 0;
         NUM_ARRAY_ONE = [];
         NUM_ARRAY_TWO = [];
@@ -29,6 +34,7 @@ function btnEqualPress() {
         NUM_TWO = 0;
         NUM_INDEX = 1;
         OPERATOR = "";
+        STORED_NUMBER = 0;
     })
 }
 
@@ -44,6 +50,7 @@ function btnClearPress() {
         NUM_TWO = 0;
         NUM_INDEX = 1;
         OPERATOR = "";
+        STORED_NUMBER = 0;
         calcDisplayText.textContent = "0";
     });
 }
@@ -57,15 +64,14 @@ function btnOperationsPress() {
             if (NUM_INDEX == 1) {
                 NUM_INDEX = 2;
             } else if (NUM_INDEX == 2) {
-                OPERATOR = btn.value;
                 STORED_NUMBER = operate(OPERATOR, NUM_ONE, NUM_TWO);
                 newCalcDisplayText = STORED_NUMBER.toString();
                 calcDisplayText.textContent = newCalcDisplayText;
-            } else {
-                OPERATOR = btn.value;
-                calcDisplayText.textContent = "0";
-                // alert(OPERATOR);
             }
+            OPERATOR = btn.value;
+            calcDisplayText.textContent = "0";
+            // alert(OPERATOR);
+            
 
         })
     })
@@ -97,6 +103,9 @@ function btnNumPress() {
                 if (STORED_NUMBER > 0 || STORED_NUMBER < 0) {
                     // Replace NUM_ONE if this is after 2nd operator
                     NUM_ONE = STORED_NUMBER;
+                    // Need to reset numArrays to prevent old data corruption
+                    NUM_ARRAY_ONE = [];
+                    NUM_ARRAY_TWO = [];
                 }
                 if (NUM_ARRAY_TWO.length >= 14) {
                     alert("Came in here with that Big Rick Energy!")
