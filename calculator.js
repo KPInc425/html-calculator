@@ -16,34 +16,89 @@ btnClearPress();
 btnEqualPress();
 btnDecimalPress();
 btnBackSpacePress();
+btnPosNegPress();
 
-window.addEventListener('keydown', (e) => {
-    console.log(e);
-    const key = document.querySelector(`.key[data-key ="${KeyboardEvent.code}"]`);
-    console.log(key);
-})
+
+// a lil help from https://stackoverflow.com/questions/4416505/how-to-take-keyboard-input-in-javascript
+window.addEventListener('keydown', (event) => {
+    // console.log(event);
+    if (event.defaultPrevented) {
+        return; // Do nothing if the event was already processed
+    }
+    
+    switch (event.key) {
+        case "1": 
+            getNumbersDisplay(event.key);
+            break;
+        case "2": 
+            getNumbersDisplay(event.key);
+            break;
+        case "3": 
+            getNumbersDisplay(event.key);
+            break;
+        case "4": 
+            getNumbersDisplay(event.key);
+            break;
+        case "5": 
+            getNumbersDisplay(event.key);
+            break;
+        case "6": 
+            getNumbersDisplay(event.key);
+            break;
+        case "7": 
+            getNumbersDisplay(event.key);
+            break;
+        case "8": 
+            getNumbersDisplay(event.key);
+            break;
+        case "9": 
+            getNumbersDisplay(event.key);
+            break;
+        case "0": 
+            getNumbersDisplay(event.key);
+            break;
+        case ".": 
+            addDecimalPoint();
+            break;
+        case "+": 
+            operateOnNums(event.key);
+            break;
+        case "-": 
+            operateOnNums(event.key);
+            break;
+        case "*": 
+            operateOnNums(event.key);
+            break;
+        case "/": 
+            operateOnNums(event.key);
+            break;
+        case "Enter": 
+            solveEquation();
+            break;
+        case "Backspace": 
+            deleteLastInput();
+            break;
+    }
+    // Cancel the default action to avoid it being handled twice
+    event.preventDefault();
+}, true);
+// the last option dispatched the event to listener first,
+// then dispatches event to window
+
+
+function btnPosNegPress() {
+    let btnPosNeg = document.querySelector('#posNeg');
+
+    btnPosNeg.addEventListener('click', () => {
+        invertNum();
+    })
+}
 
 function btnBackSpacePress() {
     const btnBackSpace = document.querySelector('#btnBackSpace');
 
     btnBackSpace.addEventListener('click', () => {
-        if (NUM_INDEX == 1) {
-            NUM_ARRAY_ONE.pop();
-            if (NUM_ARRAY_ONE.length == 0) {
-                NUM_ARRAY_ONE[0] = 0;
-            }
-            // We make array a string, remove all , to make string display like a number
-            let newCalcDisplayText = NUM_ARRAY_ONE.toString().replace(/,/g, "");
-            calcDisplayText.textContent = newCalcDisplayText;
-        } else {
-            NUM_ARRAY_TWO.pop();
-            if (NUM_ARRAY_TWO.length == 0) {
-                NUM_ARRAY_TWO[0] = 0;
-            }
-            // We make array a string, remove all , to make string display like a number
-            let newCalcDisplayText = NUM_ARRAY_TWO.toString().replace(/,/g, "");
-            calcDisplayText.textContent = newCalcDisplayText;
-        }
+        deleteLastInput();
     })
 }
 
@@ -51,23 +106,7 @@ function btnDecimalPress() {
     const btnDecimal = document.querySelector('#btnDecimal');
 
     btnDecimal.addEventListener('click', () => {
-        if (DECIMAL_USED) {
-            alert('You already have a decimal, this isn\'t an IP');
-        } else {
-            if (NUM_INDEX == 1) {
-                NUM_ARRAY_ONE.push(btnDecimal.value)
-                // We make array a string, remove all , to make string display like a number
-                let newCalcDisplayText = NUM_ARRAY_ONE.toString().replace(/,/g, "");
-                calcDisplayText.textContent = newCalcDisplayText;
-                DECIMAL_USED = true;
-            } else {
-                NUM_ARRAY_TWO.push(btnDecimal.value)
-                // We make array a string, remove all , to make string display like a number
-                let newCalcDisplayText = NUM_ARRAY_TWO.toString().replace(/,/g, "");
-                calcDisplayText.textContent = newCalcDisplayText;
-                DECIMAL_USED = true;
-            }
-        }
+        addDecimalPoint();
     })
 }
 
@@ -76,23 +115,7 @@ function btnEqualPress() {
     const btnEqual = document.querySelector('#btnEquals');
 
     btnEqual.addEventListener('click', () => {
-        let newCalcDisplayText = operate(OPERATOR, NUM_ONE, NUM_TWO);
-        if (newCalcDisplayText % 1 != 0) {
-            // Used a parseFloat here to get rid of trailing zeros
-            calcDisplayText.textContent = parseFloat(newCalcDisplayText.toFixed(12));
-        } else {
-            calcDisplayText.textContent = newCalcDisplayText;
-        }
-        
-        CALCULATED_NUMBER = 0;
-        NUM_ARRAY_ONE = [];
-        NUM_ARRAY_TWO = [];
-        NUM_ONE = 0;
-        NUM_TWO = 0;
-        NUM_INDEX = 1;
-        OPERATOR = "";
-        STORED_NUMBER = 0;
-        DECIMAL_USED = false;
+        solveEquation()
     })
 }
 
@@ -120,23 +143,7 @@ function btnOperationsPress() {
 
     btnArray.forEach((btn) => {
         btn.addEventListener('click', () => {
-            if (NUM_INDEX == 1) {
-                NUM_INDEX = 2;
-            } else if (NUM_INDEX == 2) {
-                STORED_NUMBER = operate(OPERATOR, NUM_ONE, NUM_TWO);
-                newCalcDisplayText = STORED_NUMBER.toString();
-                calcDisplayText.textContent = newCalcDisplayText;
-                // Need to reset numArrays to prevent old data corruption
-                // THESE NEED TO BE MOVED OR GATED THEY ARE RESETTING EACH CLICK
-                NUM_ARRAY_ONE = [];
-                NUM_ARRAY_TWO = [];
-            }
-            OPERATOR = btn.value;
-            calcDisplayText.textContent = "0";
-            DECIMAL_USED = false;
-            // alert(OPERATOR);
-            
-
+            operateOnNums(btn.value)
         })
     })
 }
@@ -149,47 +156,7 @@ function btnNumPress() {
         btn.addEventListener('click', () => {
             // alert(btn.value);
             // A check to make sure number doesn't get too large for display
-            if (NUM_INDEX == 1) {
-                if (NUM_ARRAY_ONE.length >= 14) {
-                    alert("Came in here with that Big Rick Energy!")
-                } else {
-                    // This is needed to prevent a leading 0 that is aquired during the 
-                    // BackSpace button
-                    if (NUM_ARRAY_ONE[0] == 0) {
-                        NUM_ARRAY_ONE.pop()
-                    }
-                    NUM_ARRAY_ONE.push(btn.value);
-
-                    // We make array a string, remove all , to make string display like a number
-                    let newCalcDisplayText = NUM_ARRAY_ONE.toString().replace(/,/g, "");
-                    calcDisplayText.textContent = newCalcDisplayText;
-    
-                    // We store the string as a number for future computation
-                    NUM_ONE = Number(newCalcDisplayText);
-                }
-            } else if(NUM_INDEX == 2) {
-                // Check if additional operators have been called
-                if (STORED_NUMBER > 0 || STORED_NUMBER < 0) {
-                    // Replace NUM_ONE if this is after 2nd operator
-                    NUM_ONE = STORED_NUMBER;
-                }
-                if (NUM_ARRAY_TWO.length >= 14) {
-                    alert("Came in here with that Big Rick Energy!")
-                } else {
-                    // This is needed to prevent a leading 0 that is aquired during the 
-                    // BackSpace button
-                    if (NUM_ARRAY_TWO[0] == 0) {
-                        NUM_ARRAY_TWO.pop()
-                    }
-                    NUM_ARRAY_TWO.push(btn.value);
-
-                    let newCalcDisplayText = NUM_ARRAY_TWO.toString().replace(/,/g, ""); 
-                    calcDisplayText.textContent = newCalcDisplayText;
-                    
-                    NUM_TWO = Number(newCalcDisplayText);
-                }
-
-            }
+            getNumbersDisplay(btn.value);
             // calcDisplayText.textContent = btn.value;
         })
     })
@@ -245,4 +212,148 @@ function divide(...args) {
         sum /= arg
     }
     return sum;
+}
+
+function getNumbersDisplay(input) {
+    if (NUM_INDEX == 1) {
+        if (NUM_ARRAY_ONE.length >= 14) {
+            alert("Came in here with that Big Rick Energy!")
+        } else {
+            // This is needed to prevent a leading 0 that is aquired during the 
+            // BackSpace button
+            if (NUM_ARRAY_ONE[0] == 0) {
+                NUM_ARRAY_ONE.pop()
+            }
+            NUM_ARRAY_ONE.push(input);
+
+            // We make array a string, remove all , to make string display like a number
+            let newCalcDisplayText = NUM_ARRAY_ONE.toString().replace(/,/g, "");
+            calcDisplayText.textContent = newCalcDisplayText;
+
+            // We store the string as a number for future computation
+            NUM_ONE = Number(newCalcDisplayText);
+        }
+    } else if(NUM_INDEX == 2) {
+        // Check if additional operators have been called
+        if (STORED_NUMBER > 0 || STORED_NUMBER < 0) {
+            // Replace NUM_ONE if this is after 2nd operator
+            NUM_ONE = STORED_NUMBER;
+        }
+        if (NUM_ARRAY_TWO.length >= 14) {
+            alert("Came in here with that Big Rick Energy!")
+        } else {
+            // This is needed to prevent a leading 0 that is aquired during the 
+            // BackSpace button
+            if (NUM_ARRAY_TWO[0] == 0) {
+                NUM_ARRAY_TWO.pop()
+            }
+            NUM_ARRAY_TWO.push(input);
+
+            let newCalcDisplayText = NUM_ARRAY_TWO.toString().replace(/,/g, ""); 
+            calcDisplayText.textContent = newCalcDisplayText;
+            
+            NUM_TWO = Number(newCalcDisplayText);
+        }
+    }
+}
+
+function solveEquation() {
+    let newCalcDisplayText = operate(OPERATOR, NUM_ONE, NUM_TWO);
+    if (newCalcDisplayText % 1 != 0) {
+        // Used a parseFloat here to get rid of trailing zeros
+        calcDisplayText.textContent = parseFloat(newCalcDisplayText.toFixed(12));
+    } else {
+        calcDisplayText.textContent = newCalcDisplayText;
+    }
+    
+    NUM_ONE = CALCULATED_NUMBER;
+    CALCULATED_NUMBER = 0;
+    // NUM_ARRAY_ONE = [];
+    NUM_ARRAY_TWO = [];
+    
+    // NUM_TWO = 0;
+    // NUM_INDEX = 1;
+    // OPERATOR = "";
+    // STORED_NUMBER = 0;
+    DECIMAL_USED = false;
+}
+
+function deleteLastInput() {
+    if (NUM_INDEX == 1) {
+        if (NUM_ARRAY_ONE[NUM_ARRAY_ONE.length - 1] == ".") {
+            DECIMAL_USED = false
+        }
+        NUM_ARRAY_ONE.pop();
+        if (NUM_ARRAY_ONE.length == 0) {
+            NUM_ARRAY_ONE[0] = 0;
+        }
+        // We make array a string, remove all , to make string display like a number
+        let newCalcDisplayText = NUM_ARRAY_ONE.toString().replace(/,/g, "");
+        calcDisplayText.textContent = newCalcDisplayText;
+        NUM_ONE = Number(newCalcDisplayText);
+    } else {
+        if (NUM_ARRAY_TWO[NUM_ARRAY_TWO.length - 1] == ".") {
+            DECIMAL_USED = false
+        }
+        NUM_ARRAY_TWO.pop();
+        if (NUM_ARRAY_TWO.length == 0) {
+            NUM_ARRAY_TWO[0] = 0;
+        }
+        // We make array a string, remove all , to make string display like a number
+        let newCalcDisplayText = NUM_ARRAY_TWO.toString().replace(/,/g, "");
+        calcDisplayText.textContent = newCalcDisplayText;
+        NUM_TWO = Number(newCalcDisplayText);
+    }
+}
+
+function addDecimalPoint() {
+    if (DECIMAL_USED) {
+        alert('You already have a decimal, this isn\'t an IP');
+    } else {
+        if (NUM_INDEX == 1) {
+            NUM_ARRAY_ONE.push(btnDecimal.value)
+            // We make array a string, remove all , to make string display like a number
+            let newCalcDisplayText = NUM_ARRAY_ONE.toString().replace(/,/g, "");
+            calcDisplayText.textContent = newCalcDisplayText;
+            DECIMAL_USED = true;
+        } else {
+            NUM_ARRAY_TWO.push(btnDecimal.value)
+            // We make array a string, remove all , to make string display like a number
+            let newCalcDisplayText = NUM_ARRAY_TWO.toString().replace(/,/g, "");
+            calcDisplayText.textContent = newCalcDisplayText;
+            DECIMAL_USED = true;
+        }
+    }
+}
+
+function operateOnNums(operator) {
+    if (NUM_INDEX == 1) {
+        NUM_INDEX = 2;
+    } else if (NUM_INDEX == 2) {
+        STORED_NUMBER = operate(OPERATOR, NUM_ONE, NUM_TWO);
+        newCalcDisplayText = STORED_NUMBER.toString();
+        calcDisplayText.textContent = newCalcDisplayText;
+        // Need to reset numArrays to prevent old data corruption
+        // THESE NEED TO BE MOVED OR GATED THEY ARE RESETTING EACH CLICK
+        NUM_ARRAY_ONE = [];
+        NUM_ARRAY_TWO = [];
+    }
+    OPERATOR = operator;
+    calcDisplayText.textContent = "0";
+    DECIMAL_USED = false;
+    // alert(OPERATOR);
+}
+
+function invertNum() {
+    if (NUM_INDEX == 1) {
+        let inverse = NUM_ONE * -1;
+        newCalcDisplayText = inverse.toString();
+        calcDisplayText.textContent = newCalcDisplayText;
+        NUM_ONE = inverse;
+    } else if (NUM_INDEX == 2) {
+        let inverse = NUM_TWO * -1;
+        newCalcDisplayText = inverse.toString();
+        calcDisplayText.textContent = newCalcDisplayText;
+        NUM_TWO = inverse;
+    }
 }
